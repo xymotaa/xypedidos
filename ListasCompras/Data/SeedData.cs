@@ -85,6 +85,32 @@ public static class SeedData
         context.ModelosCelular.AddRange(modelosMotorola);
         context.ModelosCelular.AddRange(modelosXiaomi);
 
+        // Produtos
+        var capinha = categorias.First(c => c.Nome == "Capinha");
+        var pelicula = categorias.First(c => c.Nome == "Película");
+        var fone = categorias.First(c => c.Nome == "Fone de Ouvido");
+        var caixinha = categorias.First(c => c.Nome == "Caixinha de Som");
+        var pendrive = categorias.First(c => c.Nome == "Pendrive");
+        var cabo = categorias.First(c => c.Nome == "Cabo");
+        var carregador = categorias.First(c => c.Nome == "Carregador");
+
+        var produtos = new List<Produto>
+        {
+            new() { Nome = "Capinha Anti-impacto", Categoria = capinha },
+            new() { Nome = "Capinha Silicone", Categoria = capinha },
+            new() { Nome = "Película de Vidro", Categoria = pelicula },
+            new() { Nome = "Película Fosca", Categoria = pelicula },
+            new() { Nome = "Fone Bluetooth", Categoria = fone },
+            new() { Nome = "Fone com Fio", Categoria = fone },
+            new() { Nome = "Caixinha Bluetooth", Categoria = caixinha },
+            new() { Nome = "Pendrive 32GB", Categoria = pendrive },
+            new() { Nome = "Pendrive 64GB", Categoria = pendrive },
+            new() { Nome = "Cabo USB-C", Categoria = cabo },
+            new() { Nome = "Cabo Lightning", Categoria = cabo },
+            new() { Nome = "Carregador Turbo 20W", Categoria = carregador },
+        };
+        context.Produtos.AddRange(produtos);
+
         context.SaveChanges();
     }
 }

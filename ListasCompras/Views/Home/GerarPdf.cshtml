@@ -1,0 +1,66 @@
+@model ListasCompras.Models.ListaCompra
+@{
+    Layout = null;
+    var nomeLoja = ViewData["NomeLoja"] as string;
+    var logo = ViewData["LogoLoja"] as string;
+}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lista de Reposição - @nomeLoja</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/print.css" asp-append-version="true" />
+</head>
+<body>
+    <div class="no-print">
+        <button type="button" class="btn-app btn-app-primary" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+    </div>
+
+    <div class="pdf-header">
+        <div class="logo-placeholder">
+            @if (!string.IsNullOrEmpty(logo))
+            {
+                <img src="@logo" alt="Logo" />
+            }
+        </div>
+        <div class="titulo-central">
+            <div class="nome-loja">@nomeLoja</div>
+            <div class="rotulo">LISTA DE REPOSIÇÃO</div>
+        </div>
+        <div class="data">@DateTime.Now.ToString("dd/MM/yyyy")</div>
+    </div>
+
+    <hr class="pdf-divider" />
+
+    <table class="pdf-table">
+        <thead>
+            <tr>
+                <th>Categoria</th>
+                <th>Produto</th>
+                <th>Modelo</th>
+                <th>Qtd</th>
+                <th>Observação</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Itens)
+            {
+                <tr>
+                    <td>@item.Produto.Categoria.Nome</td>
+                    <td>@item.Produto.Nome</td>
+                    <td>@(item.ModeloCelular != null ? item.ModeloCelular.Nome : "-")</td>
+                    <td>@item.Quantidade</td>
+                    <td>@(string.IsNullOrEmpty(item.Observacao) ? "-" : item.Observacao)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="pdf-footer">
+        Total de itens: @Model.Itens.Count
+    </div>
+</body>
+</html>

@@ -1,8 +1,139 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@model ListasCompras.Models.ReposicaoIndexViewModel
+@{
+    ViewData["Title"] = "Nova Lista de Compras";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="app-breadcrumb">
+    <a asp-controller="Home" asp-action="Index">Início</a> &gt; <span class="atual">Nova Lista de Compras</span>
 </div>
+
+<div class="page-container">
+    <div class="page-header">
+        <h1>Nova Lista de Compras</h1>
+        <p>Gerencie a reposição de estoque da loja</p>
+    </div>
+
+    <div class="card-forms">
+        <form asp-action="AdicionarItem" method="post">
+            @Html.AntiForgeryToken()
+            <div class="form-row">
+                <div class="form-field">
+                    <label for="categoriaSelect">Categoria</label>
+                    <select id="categoriaSelect">
+                        <option value="">Selecione...</option>
+                        @foreach (var categoria in Model.Categorias)
+                        {
+                            <option value="@categoria.Id" data-requer-modelo="@categoria.RequerModelo.ToString().ToLower()">@categoria.Nome</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-field d-none" id="marcaField">
+                    <label for="marcaSelect">Marca</label>
+                    <select id="marcaSelect">
+                        <option value="">Selecione...</option>
+                        @foreach (var marca in Model.Marcas)
+                        {
+                            <option value="@marca.Id">@marca.Nome</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-field d-none" id="modeloField">
+                    <label for="modeloCelularId">Modelo</label>
+                    <select id="modeloSelect" name="modeloCelularId">
+                        <option value="">Selecione...</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="produtoSelect">Produto</label>
+                    <select id="produtoSelect" name="produtoId" required>
+                        <option value="">Selecione uma categoria...</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-field" style="flex: 0 1 140px;">
+                    <label for="quantidade">Quantidade</label>
+                    <input type="number" id="quantidade" name="quantidade" min="1" value="1" required />
+                </div>
+                <div class="form-field">
+                    <label for="observacao">Observação</label>
+                    <input type="text" id="observacao" name="observacao" placeholder="Ex: cor preta, cabo 1 metro..." />
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-app btn-app-primary">
+                    <span>🛒</span> Adicionar à Lista
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="section-header">
+        <h2>Itens na Lista de Reposição</h2>
+        <span class="badge-count">@Model.Lista.Itens.Count itens</span>
+    </div>
+
+    <div class="table-wrapper">
+        @if (Model.Lista.Itens.Count == 0)
+        {
+            <div class="empty-state">Nenhum item adicionado ainda. Use o formulário acima para começar.</div>
+        }
+        else
+        {
+            <table class="app-table">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Categoria</th>
+                        <th>Modelo</th>
+                        <th>Qtd</th>
+                        <th>Observação</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Lista.Itens.OrderByDescending(i => i.Id))
+                    {
+                        <tr>
+                            <td>@item.Produto.Nome</td>
+                            <td><span class="pill pill-@(item.Produto.CategoriaId % 7)">@item.Produto.Categoria.Nome</span></td>
+                            <td>@(item.ModeloCelular != null ? $"{item.ModeloCelular.MarcaCelular.Nome} {item.ModeloCelular.Nome}" : "-")</td>
+                            <td>@item.Quantidade</td>
+                            <td>@(string.IsNullOrEmpty(item.Observacao) ? "-" : item.Observacao)</td>
+                            <td>
+                                <div class="acoes">
+                                    <button type="button" class="acao-btn acao-editar" title="Editar"
+                                            onclick="editarItem(@item.Id, @item.Quantidade, '@Html.Raw(Html.Encode(item.Observacao ?? ""))')">✏️</button>
+                                    <form asp-action="RemoverItem" method="post" style="display:inline;" onsubmit="return confirm('Remover este item da lista?');">
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" name="id" value="@item.Id" />
+                                        <button type="submit" class="acao-btn acao-excluir" title="Excluir">🗑️</button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </div>
+</div>
+
+<form id="editarForm" asp-action="EditarItem" method="post" class="d-none">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" id="editarId" />
+    <input type="hidden" name="quantidade" id="editarQuantidade" />
+    <input type="hidden" name="observacao" id="editarObservacao" />
+</form>
+
+<a asp-action="GerarPdf" asp-route-listaId="@Model.Lista.Id" class="fab-pdf" target="_blank">
+    <span>🖨️</span> Gerar PDF de Reposição
+</a>
+
+@section Scripts {
+    <script>
+        const produtos = @Html.Raw(Json.Serialize(Model.Produtos.Select(p => new { p.Id, p.Nome, p.CategoriaId })));
+        const modelos = @Html.Raw(Json.Serialize(Model.Modelos.Select(m => new { m.Id, m.Nome, m.MarcaCelularId })));
+    </script>
+    <script src="~/js/reposicao.js" asp-append-version="true"></script>
+}

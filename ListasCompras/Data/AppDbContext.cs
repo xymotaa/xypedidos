@@ -14,6 +14,7 @@ public class AppDbContext : DbContext
     public DbSet<ProdutoModeloCompatibilidade> ProdutoModeloCompatibilidades { get; set; }
     public DbSet<ListaCompra> ListasCompra { get; set; }
     public DbSet<ItemListaCompra> ItensListaCompra { get; set; }
+    public DbSet<ConfiguracaoLoja> ConfiguracoesLoja { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

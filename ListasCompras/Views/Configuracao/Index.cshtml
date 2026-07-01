@@ -1,0 +1,66 @@
+@model ListasCompras.Models.ConfiguracaoLoja
+@{
+    ViewData["Title"] = "Configurações";
+}
+
+<div class="app-breadcrumb">
+    <a asp-controller="Home" asp-action="Index">Início</a> &gt; <span class="atual">Configurações</span>
+</div>
+
+<div class="card-config">
+    <h1>Configurações da Loja</h1>
+
+    @if (TempData["Sucesso"] != null)
+    {
+        <div class="alert-sucesso">@TempData["Sucesso"]</div>
+    }
+
+    <form asp-controller="Configuracao" asp-action="Salvar" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+        <div class="form-field" style="margin-bottom: 1.25rem;">
+            <label for="nomeLoja">Nome da Loja</label>
+            <input type="text" id="nomeLoja" name="nomeLoja" value="@Model.NomeLoja" required />
+        </div>
+
+        <div class="form-field" style="margin-bottom: 0.5rem;">
+            <label>Logo da Loja</label>
+            <label class="upload-area" for="logoInput" id="uploadArea">
+                @if (!string.IsNullOrEmpty(Model.LogoBase64))
+                {
+                    <img src="@Model.LogoBase64" alt="Logo atual" class="logo-preview" id="logoPreview" />
+                }
+                else
+                {
+                    <span class="upload-icon">⬆️</span>
+                    <span>Clique para enviar uma imagem</span>
+                }
+            </label>
+            <input type="file" id="logoInput" name="logo" accept="image/*" class="d-none" />
+        </div>
+
+        <button type="submit" class="btn-app btn-app-primary">Salvar</button>
+    </form>
+
+    <div class="pdf-preview-box">
+        <p style="margin-top:0; font-size:0.8rem; text-transform:uppercase; color:var(--texto-suave); font-weight:600;">
+            Prévia do cabeçalho impresso
+        </p>
+        <div class="pdf-preview-header">
+            <div class="logo-placeholder" id="previewLogoBox">
+                @if (!string.IsNullOrEmpty(Model.LogoBase64))
+                {
+                    <img src="@Model.LogoBase64" alt="Logo" id="previewLogoImg" />
+                }
+            </div>
+            <div class="titulo">
+                <span id="previewNome">@Model.NomeLoja</span>
+                <small>LISTA DE REPOSIÇÃO</small>
+            </div>
+            <div style="width:36px;"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/configuracao.js" asp-append-version="true"></script>
+}

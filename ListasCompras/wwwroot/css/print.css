@@ -1,0 +1,106 @@
+:root {
+  --verde-escuro: #1a472a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 2rem;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #21262b;
+}
+
+.pdf-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pdf-header .logo-placeholder {
+  width: 56px;
+  height: 56px;
+  border-radius: 10px;
+  background: var(--verde-escuro);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.pdf-header .logo-placeholder img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.pdf-header .titulo-central {
+  flex: 1;
+  text-align: center;
+}
+
+.pdf-header .titulo-central .nome-loja {
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.pdf-header .titulo-central .rotulo {
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  color: var(--verde-escuro);
+  font-weight: 600;
+}
+
+.pdf-header .data {
+  font-size: 0.9rem;
+  color: #6c757d;
+  flex-shrink: 0;
+  text-align: right;
+}
+
+.pdf-divider {
+  border: none;
+  border-top: 2px solid var(--verde-escuro);
+  margin: 1rem 0 1.5rem;
+}
+
+table.pdf-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.pdf-table thead th {
+  text-align: left;
+  border-bottom: 2px solid #21262b;
+  padding: 0.5rem 0.6rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+}
+
+table.pdf-table tbody td {
+  padding: 0.55rem 0.6rem;
+  border-bottom: 1px solid #dee2e6;
+  font-size: 0.9rem;
+}
+
+.pdf-footer {
+  margin-top: 1.5rem;
+  font-weight: 700;
+  text-align: right;
+}
+
+.no-print {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+
+  body {
+    padding: 0;
+  }
+}

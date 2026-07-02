@@ -17,7 +17,7 @@ public static class SeedData
             new() { Nome = "Fone de Ouvido", RequerModelo = false },
             new() { Nome = "Caixinha de Som", RequerModelo = false },
             new() { Nome = "Pendrive", RequerModelo = false },
-            new() { Nome = "Cabo", RequerModelo = false },
+            new() { Nome = "Cabo USB", RequerModelo = false },
             new() { Nome = "Carregador", RequerModelo = false },
         };
         context.Categorias.AddRange(categorias);
@@ -91,7 +91,7 @@ public static class SeedData
         var fone = categorias.First(c => c.Nome == "Fone de Ouvido");
         var caixinha = categorias.First(c => c.Nome == "Caixinha de Som");
         var pendrive = categorias.First(c => c.Nome == "Pendrive");
-        var cabo = categorias.First(c => c.Nome == "Cabo");
+        var cabo = categorias.First(c => c.Nome == "Cabo USB");
         var carregador = categorias.First(c => c.Nome == "Carregador");
 
         var produtos = new List<Produto>
@@ -106,7 +106,7 @@ public static class SeedData
             new() { Nome = "Pendrive 32GB", Categoria = pendrive },
             new() { Nome = "Pendrive 64GB", Categoria = pendrive },
             new() { Nome = "Cabo USB-C", Categoria = cabo },
-            new() { Nome = "Cabo Lightning", Categoria = cabo },
+            new() { Nome = "Cabo Micro USB", Categoria = cabo },
             new() { Nome = "Carregador Turbo 20W", Categoria = carregador },
         };
         context.Produtos.AddRange(produtos);

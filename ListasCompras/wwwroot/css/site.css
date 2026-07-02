@@ -1,13 +1,29 @@
+/*
+  Identidade: "etiqueta de estoque / recibo de reposição".
+  A ferramenta existe para gerar uma lista impressa pro fornecedor — por isso o
+  visual pega emprestado a linguagem de etiqueta/ticket: friso pontilhado de
+  destacar (tear-off), selo mono para quantidades/contagens, leve rotação nas
+  tags, papel neutro em vez de branco puro.
+*/
+
 :root {
-  --verde-escuro: #1a472a;
-  --verde-claro: #52b788;
-  --cinza-card: #f8f9fa;
-  --branco: #ffffff;
-  --texto: #21262b;
-  --texto-suave: #6c757d;
-  --borda: #e9ecef;
-  --sombra: 0 2px 10px rgba(0, 0, 0, 0.06);
-  --sombra-elevada: 0 8px 24px rgba(26, 71, 42, 0.35);
+  --pine: #1d4d34;
+  --pine-ink: #123726;
+  --moss: #4f9d75;
+  --kraft: #c67c33;
+  --kraft-ink: #8f5720;
+  --paper: #f4f6f2;
+  --card: #ffffff;
+  --ink: #172019;
+  --ink-soft: #62705f;
+  --line: #dde3d8;
+  --danger: #b23b3b;
+  --sombra: 0 2px 10px rgba(23, 32, 25, 0.06);
+  --sombra-elevada: 0 10px 28px rgba(18, 55, 38, 0.28);
+
+  --font-display: "Space Grotesk", "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
 }
 
 * {
@@ -24,22 +40,51 @@ html, body {
 
 body {
   margin: 0;
-  background: var(--branco);
-  color: var(--texto);
-  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-body);
 }
 
 a {
-  color: var(--verde-escuro);
+  color: var(--pine);
+}
+
+:focus-visible {
+  outline: 2px solid var(--kraft);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }
 
 /* ===== Navbar ===== */
 .app-navbar {
-  background: var(--verde-escuro);
+  background: var(--pine);
   padding: 0.9rem 1.5rem;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   position: relative;
+  background-image: repeating-linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.55) 0 10px,
+    transparent 10px 20px
+  );
+  background-size: 20px 3px;
+  background-position: 0 bottom;
+  background-repeat: repeat-x;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.08);
+}
+
+.app-navbar .brand {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  text-decoration: none;
 }
 
 .app-navbar .logo-placeholder {
@@ -50,7 +95,8 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--branco);
+  color: var(--card);
+  font-family: var(--font-display);
   font-weight: 600;
   flex-shrink: 0;
   overflow: hidden;
@@ -63,29 +109,51 @@ a {
 }
 
 .app-navbar .store-name {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  color: var(--branco);
+  color: var(--card);
+  font-family: var(--font-display);
   font-weight: 600;
   font-size: 1.15rem;
-  text-align: center;
+  letter-spacing: 0.01em;
+}
+
+.app-navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.nav-icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--card);
+  text-decoration: none;
+  font-size: 1.1rem;
+  background: rgba(255, 255, 255, 0.1);
+  transition: background 0.15s;
+}
+
+.nav-icon-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 /* ===== Breadcrumb ===== */
 .app-breadcrumb {
   padding: 0.9rem 1.5rem 0;
   font-size: 0.85rem;
-  color: var(--texto-suave);
+  color: var(--ink-soft);
 }
 
 .app-breadcrumb a {
-  color: var(--texto-suave);
+  color: var(--ink-soft);
   text-decoration: none;
 }
 
 .app-breadcrumb .atual {
-  color: var(--verde-escuro);
+  color: var(--pine);
   font-weight: 600;
 }
 
@@ -101,21 +169,24 @@ a {
 }
 
 .page-header h1 {
-  font-size: 1.7rem;
+  font-family: var(--font-display);
+  font-size: 1.8rem;
   font-weight: 700;
-  color: var(--texto);
+  color: var(--ink);
   margin: 0 0 0.25rem;
+  letter-spacing: -0.01em;
 }
 
 .page-header p {
-  color: var(--texto-suave);
+  color: var(--ink-soft);
   margin: 0;
 }
 
 /* ===== Card ===== */
 .card-forms {
-  background: var(--branco);
-  border-radius: 14px;
+  background: var(--card);
+  border-radius: 12px;
+  border: 1px solid var(--line);
   box-shadow: var(--sombra);
   padding: 1.5rem;
   margin-bottom: 2rem;
@@ -135,27 +206,30 @@ a {
 }
 
 .form-field label {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 600;
-  color: var(--texto);
+  color: var(--ink);
   margin-bottom: 0.35rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
 }
 
 .form-field select,
 .form-field input {
-  border: 1px solid var(--borda);
+  border: 1px solid var(--line);
   border-radius: 8px;
   padding: 0.55rem 0.75rem;
   font-size: 0.95rem;
-  background: var(--branco);
-  color: var(--texto);
+  font-family: var(--font-body);
+  background: var(--card);
+  color: var(--ink);
 }
 
 .form-field select:focus,
 .form-field input:focus {
   outline: none;
-  border-color: var(--verde-claro);
-  box-shadow: 0 0 0 3px rgba(82, 183, 136, 0.25);
+  border-color: var(--moss);
+  box-shadow: 0 0 0 3px rgba(79, 157, 117, 0.22);
 }
 
 .form-actions {
@@ -175,16 +249,17 @@ a {
   font-weight: 600;
   cursor: pointer;
   text-decoration: none;
+  font-family: var(--font-body);
 }
 
 .btn-app-primary {
-  background: var(--verde-escuro);
-  color: var(--branco);
+  background: var(--pine);
+  color: var(--card);
 }
 
 .btn-app-primary:hover {
-  background: #123320;
-  color: var(--branco);
+  background: var(--pine-ink);
+  color: var(--card);
 }
 
 /* ===== Section header ===== */
@@ -196,24 +271,29 @@ a {
 }
 
 .section-header h2 {
+  font-family: var(--font-display);
   font-size: 1.2rem;
   font-weight: 700;
   margin: 0;
 }
 
 .badge-count {
-  background: var(--verde-claro);
-  color: var(--branco);
-  border-radius: 999px;
-  padding: 0.25rem 0.85rem;
-  font-weight: 700;
-  font-size: 0.85rem;
+  background: var(--kraft);
+  color: var(--card);
+  border-radius: 6px;
+  padding: 0.25rem 0.7rem;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 0.8rem;
+  transform: rotate(-2deg);
+  display: inline-block;
 }
 
 /* ===== Table ===== */
 .table-wrapper {
-  background: var(--branco);
-  border-radius: 14px;
+  background: var(--card);
+  border-radius: 12px;
+  border: 1px solid var(--line);
   box-shadow: var(--sombra);
   overflow: hidden;
 }
@@ -224,20 +304,26 @@ table.app-table {
 }
 
 table.app-table thead th {
-  background: var(--verde-escuro);
-  color: var(--branco);
+  background: var(--pine);
+  color: var(--card);
   text-align: left;
   padding: 0.85rem 1rem;
-  font-size: 0.8rem;
-  letter-spacing: 0.03em;
+  font-size: 0.75rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
 
 table.app-table tbody td {
   padding: 0.85rem 1rem;
-  border-bottom: 1px solid var(--borda);
+  border-bottom: 1px solid var(--line);
   font-size: 0.9rem;
   vertical-align: middle;
+}
+
+table.app-table tbody td:nth-child(4) {
+  font-family: var(--font-mono);
+  font-weight: 600;
 }
 
 table.app-table tbody tr:last-child td {
@@ -245,21 +331,22 @@ table.app-table tbody tr:last-child td {
 }
 
 table.app-table tbody tr:hover {
-  background: var(--cinza-card);
+  background: var(--paper);
 }
 
 .empty-state {
   text-align: center;
   padding: 2.5rem 1rem;
-  color: var(--texto-suave);
+  color: var(--ink-soft);
 }
 
 /* ===== Pills de categoria ===== */
 .pill {
   display: inline-block;
-  padding: 0.3rem 0.75rem;
-  border-radius: 999px;
-  font-size: 0.78rem;
+  padding: 0.3rem 0.7rem 0.3rem 0.55rem;
+  border-radius: 5px;
+  border-left: 3px solid currentColor;
+  font-size: 0.76rem;
   font-weight: 600;
   white-space: nowrap;
 }
@@ -289,15 +376,15 @@ table.app-table tbody tr:hover {
 }
 
 .acao-editar {
-  color: var(--verde-escuro);
+  color: var(--pine);
 }
 
 .acao-excluir {
-  color: #dc3545;
+  color: var(--danger);
 }
 
 .acao-btn:hover {
-  background: var(--cinza-card);
+  background: var(--paper);
 }
 
 /* ===== FAB ===== */
@@ -305,12 +392,14 @@ table.app-table tbody tr:hover {
   position: fixed;
   right: 1.5rem;
   bottom: 1.5rem;
-  background: var(--verde-escuro);
-  color: var(--branco);
+  background: var(--kraft);
+  color: var(--card);
   border: none;
-  border-radius: 999px;
+  clip-path: polygon(10px 0, 100% 0, 100% 100%, 0 100%, 0 10px);
+  border-radius: 4px;
   padding: 0.9rem 1.4rem;
   font-weight: 700;
+  font-family: var(--font-display);
   font-size: 0.95rem;
   display: inline-flex;
   align-items: center;
@@ -321,43 +410,46 @@ table.app-table tbody tr:hover {
 }
 
 .fab-pdf:hover {
-  background: #123320;
-  color: var(--branco);
+  background: var(--kraft-ink);
+  color: var(--card);
 }
 
 /* ===== Configurações ===== */
 .card-config {
   max-width: 560px;
   margin: 2rem auto;
-  background: var(--branco);
-  border-radius: 14px;
+  background: var(--card);
+  border-radius: 12px;
+  border: 1px solid var(--line);
   box-shadow: var(--sombra);
   padding: 2rem;
 }
 
 .card-config h1 {
+  font-family: var(--font-display);
   font-size: 1.4rem;
   margin: 0 0 1.5rem;
 }
 
 .upload-area {
-  border: 2px dashed var(--borda);
-  border-radius: 12px;
+  border: 2px dashed var(--line);
+  border-radius: 10px;
   padding: 2rem 1rem;
   text-align: center;
-  color: var(--texto-suave);
+  color: var(--ink-soft);
   cursor: pointer;
   margin-bottom: 1.5rem;
   transition: border-color 0.15s;
+  display: block;
 }
 
 .upload-area:hover {
-  border-color: var(--verde-claro);
+  border-color: var(--moss);
 }
 
 .upload-area .upload-icon {
   font-size: 1.8rem;
-  color: var(--verde-claro);
+  color: var(--moss);
   display: block;
   margin-bottom: 0.5rem;
 }
@@ -370,7 +462,7 @@ table.app-table tbody tr:hover {
 
 .alert-sucesso {
   background: #e6f4ea;
-  color: var(--verde-escuro);
+  color: var(--pine);
   border-radius: 8px;
   padding: 0.75rem 1rem;
   margin-bottom: 1.25rem;
@@ -379,18 +471,18 @@ table.app-table tbody tr:hover {
 }
 
 .pdf-preview-box {
-  border: 1px solid var(--borda);
+  border: 1px solid var(--line);
   border-radius: 10px;
   padding: 1rem;
   margin-top: 1.5rem;
-  background: var(--cinza-card);
+  background: var(--paper);
 }
 
 .pdf-preview-box .pdf-preview-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: 2px solid var(--verde-escuro);
+  border-bottom: 2px solid var(--pine);
   padding-bottom: 0.6rem;
 }
 
@@ -398,7 +490,7 @@ table.app-table tbody tr:hover {
   width: 36px;
   height: 36px;
   border-radius: 8px;
-  background: var(--verde-escuro);
+  background: var(--pine);
   overflow: hidden;
 }
 
@@ -410,13 +502,16 @@ table.app-table tbody tr:hover {
 
 .pdf-preview-box .pdf-preview-header .titulo {
   text-align: center;
+  font-family: var(--font-display);
   font-weight: 700;
 }
 
 .pdf-preview-box .pdf-preview-header .titulo small {
   display: block;
-  font-weight: 400;
-  color: var(--texto-suave);
+  font-family: var(--font-mono);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
 }
 
 /* ===== Responsivo ===== */

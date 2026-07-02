@@ -3,8 +3,10 @@
     ViewData["Title"] = "Nova Lista de Compras";
 }
 
-<div class="app-breadcrumb">
-    <a asp-controller="Home" asp-action="Index">Início</a> &gt; <span class="atual">Nova Lista de Compras</span>
+<div class="app-breadcrumb-bar">
+    <div class="app-breadcrumb">
+        <span class="trilha"><a asp-controller="Home" asp-action="Index">Dashboard</a> / <span class="atual">Nova Lista</span></span>
+    </div>
 </div>
 
 <div class="page-container">
@@ -70,7 +72,7 @@
 
     <div class="section-header">
         <h2>Itens na Lista de Reposição</h2>
-        <span class="badge-count">@Model.Lista.Itens.Count itens</span>
+        <span class="badge-count">@Model.Lista.Itens.Count itens selecionados</span>
     </div>
 
     <div class="table-wrapper">
@@ -96,7 +98,7 @@
                     {
                         <tr>
                             <td>@item.Produto.Nome</td>
-                            <td><span class="pill pill-@(item.Produto.CategoriaId % 7)">@item.Produto.Categoria.Nome</span></td>
+                            <td><span class="pill">@item.Produto.Categoria.Nome</span></td>
                             <td>@(item.ModeloCelular != null ? $"{item.ModeloCelular.MarcaCelular.Nome} {item.ModeloCelular.Nome}" : "-")</td>
                             <td>@item.Quantidade</td>
                             <td>@(string.IsNullOrEmpty(item.Observacao) ? "-" : item.Observacao)</td>

@@ -1,5 +1,13 @@
 :root {
-  --verde-escuro: #1a472a;
+  --pine: #123f31;
+  --pine-ink: #0c2e23;
+  --paper: #f5f6f8;
+  --card: #ffffff;
+  --ink: #1f2530;
+  --ink-soft: #6b7280;
+  --line: #e3e6ea;
+  --pill-bg: #e3f5ea;
+  --pill-ink: #1a7a4c;
 }
 
 * {
@@ -8,23 +16,96 @@
 
 body {
   margin: 0;
-  padding: 2rem;
+  background: var(--paper);
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  color: #21262b;
+  color: var(--ink);
 }
 
-.pdf-header {
+/* ===== Barra superior (tela, não impressa) ===== */
+.report-topbar {
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+  padding: 0.9rem 1.5rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
 }
 
-.pdf-header .logo-placeholder {
-  width: 56px;
-  height: 56px;
+.report-topbar .trilha {
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+
+.report-topbar .trilha a {
+  color: var(--ink-soft);
+  text-decoration: none;
+}
+
+.report-topbar .trilha a:hover {
+  color: var(--pine);
+}
+
+.report-topbar .atual {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.btn-app {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.btn-app-primary {
+  background: var(--pine);
+  color: var(--card);
+}
+
+.btn-app-primary:hover {
+  background: var(--pine-ink);
+}
+
+/* ===== Miolo do relatório ===== */
+.report-shell {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.report-card {
+  background: var(--card);
+  border: 1px solid var(--line);
   border-radius: 10px;
-  background: var(--verde-escuro);
+  box-shadow: 0 1px 3px rgba(31, 37, 48, 0.06);
+  padding: 2rem;
+}
+
+.pdf-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.pdf-header-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.pdf-header .logo-placeholder {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: var(--pine);
   flex-shrink: 0;
   overflow: hidden;
 }
@@ -35,34 +116,59 @@ body {
   object-fit: cover;
 }
 
-.pdf-header .titulo-central {
-  flex: 1;
-  text-align: center;
-}
-
-.pdf-header .titulo-central .nome-loja {
-  font-size: 1.3rem;
+.pdf-header .nome-loja {
+  font-size: 1.1rem;
   font-weight: 700;
 }
 
-.pdf-header .titulo-central .rotulo {
-  font-size: 0.85rem;
-  letter-spacing: 0.05em;
-  color: var(--verde-escuro);
-  font-weight: 600;
+.pdf-header .subtitulo {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
 }
 
-.pdf-header .data {
-  font-size: 0.9rem;
-  color: #6c757d;
-  flex-shrink: 0;
+.pdf-header-meta {
   text-align: right;
+  flex-shrink: 0;
 }
 
-.pdf-divider {
-  border: none;
-  border-top: 2px solid var(--verde-escuro);
-  margin: 1rem 0 1.5rem;
+.pdf-header-meta .rotulo {
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  color: var(--pine);
+  font-weight: 700;
+}
+
+.pdf-header-meta .data {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  margin-top: 0.2rem;
+}
+
+.pdf-info-bar {
+  display: flex;
+  gap: 2rem;
+  margin: 1.25rem 0;
+  padding: 0.9rem 0;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+}
+
+.pdf-info-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.pdf-info-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--ink-soft);
+}
+
+.pdf-info-valor {
+  font-size: 0.92rem;
+  font-weight: 600;
 }
 
 table.pdf-table {
@@ -72,27 +178,58 @@ table.pdf-table {
 
 table.pdf-table thead th {
   text-align: left;
-  border-bottom: 2px solid #21262b;
-  padding: 0.5rem 0.6rem;
-  font-size: 0.8rem;
+  background: var(--pine);
+  color: var(--card);
+  padding: 0.65rem 0.75rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
   text-transform: uppercase;
+  font-weight: 600;
 }
 
 table.pdf-table tbody td {
-  padding: 0.55rem 0.6rem;
-  border-bottom: 1px solid #dee2e6;
-  font-size: 0.9rem;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.88rem;
+}
+
+table.pdf-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.pdf-pill {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 5px;
+  background: var(--pill-bg);
+  color: var(--pill-ink);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 .pdf-footer {
-  margin-top: 1.5rem;
-  font-weight: 700;
-  text-align: right;
+  margin-top: 1.25rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.pdf-footer span {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.pdf-footer strong {
+  font-size: 1.1rem;
 }
 
 .no-print {
-  margin-bottom: 1.5rem;
-  text-align: center;
+  /* visível na tela; removido em @media print abaixo */
 }
 
 @media print {
@@ -101,6 +238,18 @@ table.pdf-table tbody td {
   }
 
   body {
+    background: var(--card);
+  }
+
+  .report-shell {
+    max-width: none;
+    padding: 0;
+  }
+
+  .report-card {
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
     padding: 0;
   }
 }

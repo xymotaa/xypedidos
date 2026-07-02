@@ -15,52 +15,79 @@
     <link rel="stylesheet" href="~/css/print.css" asp-append-version="true" />
 </head>
 <body>
-    <div class="no-print">
-        <button type="button" class="btn-app btn-app-primary" onclick="window.print()">🖨️ Imprimir / Salvar PDF</button>
+    <div class="report-topbar no-print">
+        <span class="trilha">
+            <a asp-controller="Home" asp-action="Index">Dashboard</a> /
+            <span class="atual">Relatório de Reposição</span>
+        </span>
+        <button type="button" class="btn-app btn-app-primary" onclick="window.print()">🖨️ Imprimir / Baixar PDF</button>
     </div>
 
-    <div class="pdf-header">
-        <div class="logo-placeholder">
-            @if (!string.IsNullOrEmpty(logo))
-            {
-                <img src="@logo" alt="Logo" />
-            }
+    <div class="report-shell">
+        <div class="report-card">
+            <div class="pdf-header">
+                <div class="pdf-header-brand">
+                    <div class="logo-placeholder">
+                        @if (!string.IsNullOrEmpty(logo))
+                        {
+                            <img src="@logo" alt="Logo" />
+                        }
+                    </div>
+                    <div>
+                        <div class="nome-loja">@nomeLoja</div>
+                        <div class="subtitulo">Lista de reposição de estoque</div>
+                    </div>
+                </div>
+                <div class="pdf-header-meta">
+                    <div class="rotulo">LISTA DE REPOSIÇÃO</div>
+                    <div class="data">Emitido em @DateTime.Now.ToString("dd/MM/yyyy")</div>
+                </div>
+            </div>
+
+            <div class="pdf-info-bar">
+                <div class="pdf-info-item">
+                    <span class="pdf-info-label">Nº da lista</span>
+                    <span class="pdf-info-valor">#@Model.Id</span>
+                </div>
+                <div class="pdf-info-item">
+                    <span class="pdf-info-label">Data de criação</span>
+                    <span class="pdf-info-valor">@Model.DataCriacao.ToString("dd/MM/yyyy")</span>
+                </div>
+                <div class="pdf-info-item">
+                    <span class="pdf-info-label">Status</span>
+                    <span class="pdf-info-valor">@Model.Status</span>
+                </div>
+            </div>
+
+            <table class="pdf-table">
+                <thead>
+                    <tr>
+                        <th>Categoria</th>
+                        <th>Produto</th>
+                        <th>Modelo</th>
+                        <th>Qtd</th>
+                        <th>Observação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Itens)
+                    {
+                        <tr>
+                            <td><span class="pdf-pill">@item.Produto.Categoria.Nome</span></td>
+                            <td>@item.Produto.Nome</td>
+                            <td>@(item.ModeloCelular != null ? $"{item.ModeloCelular.MarcaCelular.Nome} {item.ModeloCelular.Nome}" : "-")</td>
+                            <td>@item.Quantidade</td>
+                            <td>@(string.IsNullOrEmpty(item.Observacao) ? "-" : item.Observacao)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="pdf-footer">
+                <span>Total de itens</span>
+                <strong>@Model.Itens.Count</strong>
+            </div>
         </div>
-        <div class="titulo-central">
-            <div class="nome-loja">@nomeLoja</div>
-            <div class="rotulo">LISTA DE REPOSIÇÃO</div>
-        </div>
-        <div class="data">@DateTime.Now.ToString("dd/MM/yyyy")</div>
-    </div>
-
-    <hr class="pdf-divider" />
-
-    <table class="pdf-table">
-        <thead>
-            <tr>
-                <th>Categoria</th>
-                <th>Produto</th>
-                <th>Modelo</th>
-                <th>Qtd</th>
-                <th>Observação</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Itens)
-            {
-                <tr>
-                    <td>@item.Produto.Categoria.Nome</td>
-                    <td>@item.Produto.Nome</td>
-                    <td>@(item.ModeloCelular != null ? item.ModeloCelular.Nome : "-")</td>
-                    <td>@item.Quantidade</td>
-                    <td>@(string.IsNullOrEmpty(item.Observacao) ? "-" : item.Observacao)</td>
-                </tr>
-            }
-        </tbody>
-    </table>
-
-    <div class="pdf-footer">
-        Total de itens: @Model.Itens.Count
     </div>
 </body>
 </html>

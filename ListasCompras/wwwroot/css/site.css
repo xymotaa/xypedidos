@@ -125,48 +125,6 @@ a {
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* ===== Breadcrumb ===== */
-.app-breadcrumb-bar {
-  background: var(--card);
-  border-bottom: 1px solid var(--line);
-}
-
-.app-breadcrumb {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 0.75rem 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-
-.app-breadcrumb .trilha {
-  font-size: 0.82rem;
-  color: var(--ink-soft);
-}
-
-.app-breadcrumb a {
-  color: var(--ink-soft);
-  text-decoration: none;
-}
-
-.app-breadcrumb a:hover {
-  color: var(--pine);
-}
-
-.app-breadcrumb .atual {
-  color: var(--ink);
-  font-weight: 600;
-}
-
-.app-breadcrumb-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-}
-
 /* ===== Page header ===== */
 .page-container {
   max-width: 1100px;
@@ -526,11 +484,6 @@ table.app-table tbody tr:hover {
 
   .form-row {
     flex-direction: column;
-  }
-
-  .app-breadcrumb {
-    flex-direction: column;
-    align-items: flex-start;
   }
 
   table.app-table {

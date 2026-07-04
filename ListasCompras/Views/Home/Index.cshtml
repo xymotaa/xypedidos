@@ -74,7 +74,7 @@
                       onsubmit="return confirm('Finalizar esta lista e começar uma nova? Os itens atuais ficam salvos no histórico e somem desta tela.');">
                     @Html.AntiForgeryToken()
                     <input type="hidden" name="id" value="@Model.Lista.Id" />
-                    <button type="submit" class="btn-app btn-app-secondary">✅ Finalizar Lista</button>
+                    <button type="submit" class="btn-app btn-app-primary">Finalizar Lista</button>
                 </form>
             }
         </div>

@@ -76,6 +76,12 @@
                     <input type="hidden" name="id" value="@Model.Lista.Id" />
                     <button type="submit" class="btn-app btn-app-primary">Finalizar Lista</button>
                 </form>
+                <form asp-action="ExcluirLista" method="post"
+                      onsubmit="return confirm('Excluir esta lista e todos os seus itens permanentemente? Essa ação não pode ser desfeita.');">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Lista.Id" />
+                    <button type="submit" class="btn-app btn-app-primary">Excluir Lista</button>
+                </form>
             }
         </div>
     </div>

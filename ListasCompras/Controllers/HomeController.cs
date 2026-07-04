@@ -97,6 +97,23 @@ public class HomeController : LojaControllerBase
         return RedirectToAction(nameof(Index));
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult ExcluirLista(int id)
+    {
+        var lista = Context.ListasCompra
+            .Include(l => l.Itens)
+            .FirstOrDefault(l => l.Id == id && l.Status == "Aberta");
+
+        if (lista != null)
+        {
+            Context.ItensListaCompra.RemoveRange(lista.Itens);
+            Context.ListasCompra.Remove(lista);
+            Context.SaveChanges();
+        }
+        return RedirectToAction(nameof(Index));
+    }
+
     public IActionResult GerarPdf(int listaId)
     {
         var lista = Context.ListasCompra

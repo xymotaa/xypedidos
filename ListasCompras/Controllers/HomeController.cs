@@ -88,7 +88,7 @@ public class HomeController : LojaControllerBase
     {
         var lista = Context.ListasCompra
             .Include(l => l.Itens).ThenInclude(i => i.Produto).ThenInclude(p => p.Categoria)
-            .Include(l => l.Itens).ThenInclude(i => i.ModeloCelular)
+            .Include(l => l.Itens).ThenInclude(i => i.ModeloCelular).ThenInclude(m => m!.MarcaCelular)
             .FirstOrDefault(l => l.Id == listaId);
 
         if (lista == null) return NotFound();

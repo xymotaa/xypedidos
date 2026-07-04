@@ -227,6 +227,17 @@ a {
   color: var(--card);
 }
 
+.btn-app-danger {
+  background: var(--card);
+  color: var(--danger);
+  border: 1px solid var(--danger);
+}
+
+.btn-app-danger:hover {
+  background: var(--danger);
+  color: var(--card);
+}
+
 .btn-app-secondary {
   background: var(--card);
   color: var(--ink);

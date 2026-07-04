@@ -62,7 +62,6 @@
             <table class="pdf-table">
                 <thead>
                     <tr>
-                        <th>Categoria</th>
                         <th>Produto</th>
                         <th>Modelo</th>
                         <th>Qtd</th>
@@ -70,15 +69,21 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var item in Model.Itens)
+                    @foreach (var grupo in Model.Itens.GroupBy(i => i.Produto.Categoria.Nome).OrderBy(g => g.Key))
                     {
-                        <tr>
-                            <td><span class="pdf-pill">@item.Produto.Categoria.Nome</span></td>
-                            <td>@item.Produto.Nome</td>
-                            <td>@(item.ModeloCelular != null ? $"{item.ModeloCelular.MarcaCelular.Nome} {item.ModeloCelular.Nome}" : "-")</td>
-                            <td>@item.Quantidade</td>
-                            <td>@(string.IsNullOrEmpty(item.Observacao) ? "-" : item.Observacao)</td>
+                        <tr class="pdf-group-spacer"><td colspan="4"></td></tr>
+                        <tr class="pdf-group-header">
+                            <td colspan="4">@grupo.Key</td>
                         </tr>
+                        @foreach (var item in grupo)
+                        {
+                            <tr>
+                                <td>@item.Produto.Nome</td>
+                                <td>@(item.ModeloCelular != null ? $"{item.ModeloCelular.MarcaCelular.Nome} {item.ModeloCelular.Nome}" : "-")</td>
+                                <td>@item.Quantidade</td>
+                                <td>@(string.IsNullOrEmpty(item.Observacao) ? "-" : item.Observacao)</td>
+                            </tr>
+                        }
                     }
                 </tbody>
             </table>

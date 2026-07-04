@@ -84,6 +84,19 @@ public class HomeController : LojaControllerBase
         return RedirectToAction(nameof(Index));
     }
 
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult FinalizarLista(int id)
+    {
+        var lista = Context.ListasCompra.Find(id);
+        if (lista != null && lista.Status == "Aberta")
+        {
+            lista.Status = "Finalizada";
+            Context.SaveChanges();
+        }
+        return RedirectToAction(nameof(Index));
+    }
+
     public IActionResult GerarPdf(int listaId)
     {
         var lista = Context.ListasCompra

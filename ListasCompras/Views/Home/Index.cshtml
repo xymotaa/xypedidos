@@ -66,7 +66,18 @@
 
     <div class="section-header">
         <h2>Itens na Lista de Reposição</h2>
-        <span class="badge-count">@Model.Lista.Itens.Count itens selecionados</span>
+        <div class="section-header-actions">
+            <span class="badge-count">@Model.Lista.Itens.Count itens selecionados</span>
+            @if (Model.Lista.Itens.Count > 0)
+            {
+                <form asp-action="FinalizarLista" method="post"
+                      onsubmit="return confirm('Finalizar esta lista e começar uma nova? Os itens atuais ficam salvos no histórico e somem desta tela.');">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@Model.Lista.Id" />
+                    <button type="submit" class="btn-app btn-app-secondary">✅ Finalizar Lista</button>
+                </form>
+            }
+        </div>
     </div>
 
     <div class="table-wrapper">

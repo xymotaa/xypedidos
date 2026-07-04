@@ -251,6 +251,12 @@ a {
   margin: 0;
 }
 
+.section-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .badge-count {
   background: var(--paper);
   color: var(--ink-soft);

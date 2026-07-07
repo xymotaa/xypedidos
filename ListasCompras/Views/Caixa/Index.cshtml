@@ -66,13 +66,13 @@
     <style>
         body { font-family: 'Hanken Grotesk', sans-serif; background-color: #f8f9ff; color: #0b1c30; }
         .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        .qtd-input::-webkit-inner-spin-button, .qtd-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-        .qtd-input { -moz-appearance: textfield; }
         @@keyframes row-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
         .row-in { animation: row-in .15s ease-out; }
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #bfc9c3; border-radius: 10px; }
+        .desconto-input::-webkit-inner-spin-button, .desconto-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        .desconto-input { -moz-appearance: textfield; }
     </style>
 </head>
 <body class="bg-surface">
@@ -151,6 +151,7 @@
                                 <th class="px-md py-sm font-label-sm text-label-sm text-outline uppercase tracking-wider">Produto</th>
                                 <th class="px-md py-sm font-label-sm text-label-sm text-outline uppercase tracking-wider text-center">Qtd</th>
                                 <th class="px-md py-sm font-label-sm text-label-sm text-outline uppercase tracking-wider text-right">Vlr. Unit.</th>
+                                <th class="px-md py-sm font-label-sm text-label-sm text-outline uppercase tracking-wider text-center">Desc. %</th>
                                 <th class="px-md py-sm font-label-sm text-label-sm text-outline uppercase tracking-wider text-right">Subtotal</th>
                                 <th class="px-md py-sm font-label-sm text-label-sm text-outline uppercase tracking-wider text-center">Ações</th>
                             </tr>
@@ -173,7 +174,7 @@
                     </div>
                     <div class="flex justify-between items-center">
                         <span class="font-body-md text-body-md text-on-surface-variant">Descontos</span>
-                        <span class="font-body-md text-body-md text-error">- R$ 0,00</span>
+                        <span id="descontoValor" class="font-body-md text-body-md text-error">- R$ 0,00</span>
                     </div>
                     <div class="h-[1px] bg-outline-variant my-md"></div>
                     <div class="flex justify-between items-center">

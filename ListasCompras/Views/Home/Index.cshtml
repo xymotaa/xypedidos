@@ -8,17 +8,6 @@
 
     var hora = DateTime.Now.Hour;
     var saudacao = hora < 12 ? "Bom dia" : hora < 18 ? "Boa tarde" : "Boa noite";
-
-    // Itens da barra lateral. "Painel" é a tela atual (ativa).
-    var navItens = new[]
-    {
-        new { Nome = "Painel",           Icone = "dashboard",      Controller = "Home",        Ativo = true  },
-        new { Nome = "Lista de Compra",  Icone = "shopping_cart",  Controller = "ListaCompra", Ativo = false },
-        new { Nome = "Caixa",            Icone = "point_of_sale",  Controller = "Caixa",       Ativo = false },
-        new { Nome = "Estoque",          Icone = "inventory_2",    Controller = "Estoque",     Ativo = false },
-        new { Nome = "Orçamento",        Icone = "request_quote",  Controller = "Orcamento",   Ativo = false },
-        new { Nome = "Dashboards",       Icone = "analytics",      Controller = "Dashboards",  Ativo = false },
-    };
 }
 <!DOCTYPE html>
 <html class="light" lang="pt-BR">
@@ -82,78 +71,25 @@
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #bfc9c3; border-radius: 10px; }
-
-        /* Recolher / abrir a barra lateral */
-        #sidebar { transition: transform 0.2s ease-in-out; }
-        #mainContent, #topbarTitle { transition: margin-left 0.2s ease-in-out; }
-        @@media (min-width: 768px) {
-            body.sidebar-collapsed #sidebar { transform: translateX(-100%); }
-            body.sidebar-collapsed #mainContent,
-            body.sidebar-collapsed #topbarTitle { margin-left: 0; }
-        }
     </style>
 </head>
 <body class="bg-surface custom-scrollbar">
-    <!-- Barra lateral -->
-    <aside id="sidebar" class="fixed left-0 top-0 h-full w-[260px] z-40 bg-surface border-r border-outline-variant flex-col pt-20 pb-lg hidden md:flex">
-        <div class="px-lg mb-xl">
-            <a href="@Url.Action("Index", "Home")" class="flex items-center gap-md">
-                <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center overflow-hidden shrink-0">
+    <!-- Barra superior -->
+    <header class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant shadow-sm flex justify-between items-center h-16 px-lg">
+        <div class="flex items-center gap-md md:gap-xl">
+            <a asp-controller="Home" asp-action="Index" class="flex items-center gap-sm shrink-0">
+                <div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center overflow-hidden">
                     @if (!string.IsNullOrEmpty(logo))
                     {
                         <img src="@logo" alt="Logo" class="w-full h-full object-cover" />
                     }
                     else
                     {
-                        <span class="material-symbols-outlined text-white">storefront</span>
+                        <span class="material-symbols-outlined text-white text-[20px]">storefront</span>
                     }
                 </div>
-                <div>
-                    <h1 class="font-title-lg text-title-lg font-bold text-primary leading-tight">@nomeLoja</h1>
-                    <p class="font-label-md text-label-md text-on-surface-variant">Painel administrativo</p>
-                </div>
+                <span class="font-headline-md text-headline-md font-bold text-primary">@nomeLoja</span>
             </a>
-        </div>
-        <nav class="flex-1 px-md space-y-xs">
-            @foreach (var item in navItens)
-            {
-                if (item.Ativo)
-                {
-                    <a class="flex items-center gap-md px-md py-sm rounded-lg text-secondary font-bold border-l-4 border-secondary bg-surface-container-low transition-all duration-200"
-                       asp-controller="@item.Controller" asp-action="Index">
-                        <span class="material-symbols-outlined">@item.Icone</span>
-                        <span class="font-label-md text-label-md">@item.Nome</span>
-                    </a>
-                }
-                else
-                {
-                    <a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-all duration-200"
-                       asp-controller="@item.Controller" asp-action="Index">
-                        <span class="material-symbols-outlined">@item.Icone</span>
-                        <span class="font-label-md text-label-md">@item.Nome</span>
-                    </a>
-                }
-            }
-        </nav>
-        <div class="mt-auto px-md space-y-xs pt-lg border-t border-outline-variant">
-            <a class="flex items-center gap-md px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-all duration-200"
-               asp-controller="Configuracao" asp-action="Index">
-                <span class="material-symbols-outlined">settings</span>
-                <span class="font-label-md text-label-md">Configurações</span>
-            </a>
-        </div>
-    </aside>
-
-    <!-- Barra superior -->
-    <header class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant shadow-sm flex justify-between items-center h-16 px-lg">
-        <div class="flex items-center gap-md md:gap-xl">
-            <button type="button" onclick="toggleSidebar()" aria-label="Recolher ou abrir o menu"
-                    class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high hover:text-primary transition-colors shrink-0">
-                <span class="material-symbols-outlined">menu</span>
-            </button>
-            <div id="topbarTitle" class="md:ml-[260px] block">
-                <span class="font-headline-md text-headline-md font-bold text-primary">Painel</span>
-            </div>
             <div class="relative w-96 hidden lg:block">
                 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
                 <input class="w-full bg-surface-container-low border-none rounded-full pl-10 pr-4 py-2 font-body-md text-body-md focus:ring-2 focus:ring-secondary/20"
@@ -186,7 +122,7 @@
     </header>
 
     <!-- Conteúdo -->
-    <main id="mainContent" class="md:ml-[260px] pt-24 px-lg pb-xl max-w-[1440px]">
+    <main class="pt-24 px-lg pb-xl max-w-[1440px] mx-auto">
         <!-- Boas-vindas -->
         <section class="mb-xl">
             <div class="flex flex-wrap items-center gap-md mb-xs">
@@ -368,7 +304,6 @@
                             <th class="px-lg py-md font-label-md text-label-md text-outline uppercase">Data</th>
                             <th class="px-lg py-md font-label-md text-label-md text-outline uppercase">Valor</th>
                             <th class="px-lg py-md font-label-md text-label-md text-outline uppercase">Status</th>
-                            <th class="px-lg py-md font-label-md text-label-md text-outline uppercase">Ação</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-outline-variant">
@@ -377,35 +312,23 @@
                             <td class="px-lg py-md font-body-md text-body-md">Auto Oficina Central</td>
                             <td class="px-lg py-md font-body-md text-body-md">12/10/2023</td>
                             <td class="px-lg py-md font-body-md text-body-md">R$ 1.850,00</td>
-                            <td class="px-lg py-md"><span class="bg-secondary-container text-secondary px-sm py-xs rounded-full font-label-sm text-label-sm">Aprovado</span></td>
-                            <td class="px-lg py-md"><span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary">more_horiz</span></td>
-                        </tr>
+                            <td class="px-lg py-md"><span class="bg-secondary-container text-secondary px-sm py-xs rounded-full font-label-sm text-label-sm">Aprovado</span></td>                        </tr>
                         <tr class="hover:bg-surface-container-low transition-colors">
                             <td class="px-lg py-md font-body-md text-body-md">#ORC-1210</td>
                             <td class="px-lg py-md font-body-md text-body-md">Logística Express S.A.</td>
                             <td class="px-lg py-md font-body-md text-body-md">12/10/2023</td>
                             <td class="px-lg py-md font-body-md text-body-md">R$ 4.300,00</td>
-                            <td class="px-lg py-md"><span class="bg-surface-container text-on-surface-variant px-sm py-xs rounded-full font-label-sm text-label-sm">Pendente</span></td>
-                            <td class="px-lg py-md"><span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary">more_horiz</span></td>
-                        </tr>
+                            <td class="px-lg py-md"><span class="bg-surface-container text-on-surface-variant px-sm py-xs rounded-full font-label-sm text-label-sm">Pendente</span></td>                        </tr>
                         <tr class="hover:bg-surface-container-low transition-colors">
                             <td class="px-lg py-md font-body-md text-body-md">#ORC-1211</td>
                             <td class="px-lg py-md font-body-md text-body-md">João Ricardo Mendes</td>
                             <td class="px-lg py-md font-body-md text-body-md">11/10/2023</td>
                             <td class="px-lg py-md font-body-md text-body-md">R$ 560,00</td>
-                            <td class="px-lg py-md"><span class="bg-secondary-container text-secondary px-sm py-xs rounded-full font-label-sm text-label-sm">Aprovado</span></td>
-                            <td class="px-lg py-md"><span class="material-symbols-outlined text-outline cursor-pointer hover:text-primary">more_horiz</span></td>
-                        </tr>
+                            <td class="px-lg py-md"><span class="bg-secondary-container text-secondary px-sm py-xs rounded-full font-label-sm text-label-sm">Aprovado</span></td>                        </tr>
                     </tbody>
                 </table>
             </div>
         </section>
     </main>
-
-    <script>
-        function toggleSidebar() {
-            document.body.classList.toggle('sidebar-collapsed');
-        }
-    </script>
 </body>
 </html>

@@ -27,6 +27,23 @@ Cada módulo é construído **por partes**: primeiro as telas, e o **banco de da
 módulo fica para depois** — modelado com EF Core seguindo o mesmo esquema da Lista de
 Compras (veja a segunda parte deste guia).
 
+### Tela inicial (Painel)
+
+`Views/Home/Index.cshtml` é uma tela **autônoma** (`Layout = null`, não usa o `_Layout`
+verde dos módulos). Estilo dashboard Material-3 via **Tailwind (CDN)**, fonte **Hanken
+Grotesk** e ícones **Material Symbols**; tokens/cores no `tailwind.config` inline.
+
+- **Sem barra lateral.** Layout de largura cheia. Topbar com marca da loja (logo/nome) +
+  engrenagem de Configurações.
+- **Navegação**: cards de acesso rápido (bento grid) que apontam para cada módulo, mais a
+  engrenagem. Os cards são HTML estático no próprio arquivo (não há mais array de módulos).
+- **KPIs, gráfico, atividades e tabela de orçamentos são dados de exemplo** (marcados com o
+  chip "dados de exemplo") até os módulos terem banco.
+- Nome/logo vêm do `ViewData` (`NomeLoja`/`LogoLoja`); saudação varia com a hora.
+
+> Convivem dois visuais: o Painel (Tailwind) e os módulos internos (`site.css` verde/Inter).
+> É esperado por enquanto — unificar depois, se quiser.
+
 ### Convenções
 
 - **Um controller por módulo**, herdando de `LojaControllerBase` (isso injeta o
@@ -51,18 +68,17 @@ Compras (veja a segunda parte deste guia).
 
 ### Passo a passo: transformar um "Em breve" em módulo real
 
-1. No card do Painel (`Views/Home/Index.cshtml`), marque o módulo como `Disponivel = true`.
-2. No controller do módulo, troque o `View("EmBreve", ...)` por uma `Index()` que monta o
+1. No controller do módulo, troque o `View("EmBreve", ...)` por uma `Index()` que monta o
    view model real e retorna a view própria.
-3. Crie `Views/<Modulo>/Index.cshtml` (e demais telas), espelhando `Views/ListaCompra/`.
-4. Modele as tabelas/entidades no banco (segunda parte deste guia) e adicione a migration
+2. Crie `Views/<Modulo>/Index.cshtml` (e demais telas), espelhando `Views/ListaCompra/`.
+3. Modele as tabelas/entidades no banco (segunda parte deste guia) e adicione a migration
    EF Core correspondente.
 
 ### Passo a passo: adicionar um módulo totalmente novo ao Painel
 
 1. Crie `<Nome>Controller : LojaControllerBase` com `Index()` retornando `View("EmBreve", ...)`.
-2. Adicione o card ao array `modulos` em `Views/Home/Index.cshtml` (ícone, nome, descrição,
-   `Controller`, `Disponivel = false`).
+2. Adicione um card de acesso rápido em `Views/Home/Index.cshtml` (copie um `<a>` do bento
+   grid, ajuste ícone Material Symbols, texto e `asp-controller`).
 3. Pronto — a rota `/{Controller}` já funciona pela rota padrão (`Program.cs`).
 
 ---

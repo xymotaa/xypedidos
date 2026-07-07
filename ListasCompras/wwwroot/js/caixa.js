@@ -42,9 +42,32 @@ document.addEventListener("DOMContentLoaded", function () {
         }) || null;
     }
 
+    function precoComDesconto(item) {
+        if (item.descontoTipo === "valor") {
+            return Math.max(item.precoUnitario - item.desconto, 0);
+        }
+        return item.precoUnitario * (1 - item.desconto / 100);
+    }
+
     function subtotalItem(item) {
-        const bruto = item.qtd * item.precoUnitario;
-        return bruto * (1 - item.desconto / 100);
+        return item.qtd * precoComDesconto(item);
+    }
+
+    function descontoItemTotal(item) {
+        return item.qtd * (item.precoUnitario - precoComDesconto(item));
+    }
+
+    function descontoCelulaHtml(item, index) {
+        const max = item.descontoTipo === "valor" ? item.precoUnitario : 100;
+        const step = item.descontoTipo === "valor" ? "0.01" : "1";
+        return '<div class="inline-flex items-center bg-surface-container-low rounded-md overflow-hidden border border-outline-variant">' +
+            '<input type="number" min="0" max="' + max + '" step="' + step + '" value="' + item.desconto + '" data-index="' + index + '" ' +
+            'class="desconto-input w-14 text-center bg-transparent border-none py-1 font-body-md text-body-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />' +
+            '<button type="button" data-index="' + index + '" title="Alternar entre % e R$" ' +
+            'class="desconto-toggle w-8 h-7 shrink-0 bg-surface-container-high hover:bg-outline-variant/40 flex items-center justify-center font-label-sm text-label-sm font-bold text-on-surface-variant transition-colors border-l border-outline-variant">' +
+            (item.descontoTipo === "valor" ? "R$" : "%") +
+            '</button>' +
+        '</div>';
     }
 
     function adicionarItem(produto) {
@@ -52,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (existente) {
             existente.qtd += 1;
         } else {
-            cart.push({ codigo: produto.codigo, nome: produto.nome, precoUnitario: produto.precoUnitario, qtd: 1, desconto: 0 });
+            cart.push({ codigo: produto.codigo, nome: produto.nome, precoUnitario: produto.precoUnitario, qtd: 1, desconto: 0, descontoTipo: "percentual" });
         }
         renderTabela();
     }
@@ -77,13 +100,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     '</div>' +
                 '</td>' +
                 '<td class="px-md py-sm font-body-md text-body-md text-right">' + formatBRL(item.precoUnitario) + '</td>' +
-                '<td class="px-md py-sm text-center">' +
-                    '<div class="relative inline-block">' +
-                        '<input type="number" min="0" max="100" step="1" value="' + item.desconto + '" data-index="' + index + '" ' +
-                        'class="desconto-input w-14 text-center bg-surface-container-low border-none rounded-md py-1 pr-4 font-body-md text-body-md" />' +
-                        '<span class="absolute right-1 top-1/2 -translate-y-1/2 font-label-sm text-label-sm text-outline">%</span>' +
-                    '</div>' +
-                '</td>' +
+                '<td class="px-md py-sm text-center desconto-cell">' + descontoCelulaHtml(item, index) + '</td>' +
                 '<td class="px-md py-sm font-body-md text-body-md font-semibold text-right subtotal-cell">' + formatBRL(subtotalItem(item)) + '</td>' +
                 '<td class="px-md py-sm text-center">' +
                     '<button type="button" data-index="' + index + '" class="remove-btn w-8 h-8 rounded-full hover:bg-error-container text-error inline-flex items-center justify-center transition-colors">' +
@@ -101,9 +118,8 @@ document.addEventListener("DOMContentLoaded", function () {
         let totalDesconto = 0;
         let totalItens = 0;
         cart.forEach(function (item) {
-            const bruto = item.qtd * item.precoUnitario;
-            subtotalBruto += bruto;
-            totalDesconto += bruto * (item.desconto / 100);
+            subtotalBruto += item.qtd * item.precoUnitario;
+            totalDesconto += descontoItemTotal(item);
             totalItens += item.qtd;
         });
         const total = subtotalBruto - totalDesconto;
@@ -177,18 +193,35 @@ document.addEventListener("DOMContentLoaded", function () {
                 linha.querySelector(".subtotal-cell").textContent = formatBRL(subtotalItem(cart[index]));
             }
             recalcular();
+            return;
+        }
+
+        const toggleBtn = e.target.closest(".desconto-toggle");
+        if (toggleBtn) {
+            const index = parseInt(toggleBtn.dataset.index, 10);
+            const item = cart[index];
+            item.descontoTipo = item.descontoTipo === "valor" ? "percentual" : "valor";
+            item.desconto = 0;
+            const linha = itensBody.querySelector('tr[data-index="' + index + '"]');
+            if (linha) {
+                linha.querySelector(".desconto-cell").innerHTML = descontoCelulaHtml(item, index);
+                linha.querySelector(".subtotal-cell").textContent = formatBRL(subtotalItem(item));
+            }
+            recalcular();
         }
     });
 
     itensBody.addEventListener("input", function (e) {
         if (!e.target.matches(".desconto-input")) return;
         const index = parseInt(e.target.dataset.index, 10);
+        const item = cart[index];
+        const max = item.descontoTipo === "valor" ? item.precoUnitario : 100;
         let valor = parseFloat(e.target.value);
         if (isNaN(valor) || valor < 0) valor = 0;
-        if (valor > 100) valor = 100;
-        cart[index].desconto = valor;
+        if (valor > max) valor = max;
+        item.desconto = valor;
         const linha = itensBody.querySelector('tr[data-index="' + index + '"] .subtotal-cell');
-        if (linha) linha.textContent = formatBRL(subtotalItem(cart[index]));
+        if (linha) linha.textContent = formatBRL(subtotalItem(item));
         recalcular();
     });
 

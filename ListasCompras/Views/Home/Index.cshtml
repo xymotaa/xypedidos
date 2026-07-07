@@ -82,11 +82,20 @@
         .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #bfc9c3; border-radius: 10px; }
+
+        /* Recolher / abrir a barra lateral */
+        #sidebar { transition: transform 0.2s ease-in-out; }
+        #mainContent, #topbarTitle { transition: margin-left 0.2s ease-in-out; }
+        @@media (min-width: 768px) {
+            body.sidebar-collapsed #sidebar { transform: translateX(-100%); }
+            body.sidebar-collapsed #mainContent,
+            body.sidebar-collapsed #topbarTitle { margin-left: 0; }
+        }
     </style>
 </head>
 <body class="bg-surface custom-scrollbar">
     <!-- Barra lateral -->
-    <aside class="fixed left-0 top-0 h-full w-[260px] z-40 bg-surface border-r border-outline-variant flex-col pt-20 pb-lg hidden md:flex">
+    <aside id="sidebar" class="fixed left-0 top-0 h-full w-[260px] z-40 bg-surface border-r border-outline-variant flex-col pt-20 pb-lg hidden md:flex">
         <div class="px-lg mb-xl">
             <a href="@Url.Action("Index", "Home")" class="flex items-center gap-md">
                 <div class="w-10 h-10 rounded-lg bg-primary flex items-center justify-center overflow-hidden shrink-0">
@@ -137,8 +146,12 @@
 
     <!-- Barra superior -->
     <header class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant shadow-sm flex justify-between items-center h-16 px-lg">
-        <div class="flex items-center gap-xl">
-            <div class="md:ml-[260px] block">
+        <div class="flex items-center gap-md md:gap-xl">
+            <button type="button" onclick="toggleSidebar()" aria-label="Recolher ou abrir o menu"
+                    class="w-10 h-10 flex items-center justify-center rounded-lg border border-outline-variant bg-surface-container-low text-on-surface-variant hover:bg-surface-container-high hover:text-primary transition-colors shrink-0">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+            <div id="topbarTitle" class="md:ml-[260px] block">
                 <span class="font-headline-md text-headline-md font-bold text-primary">Painel</span>
             </div>
             <div class="relative w-96 hidden lg:block">
@@ -173,7 +186,7 @@
     </header>
 
     <!-- Conteúdo -->
-    <main class="md:ml-[260px] pt-24 px-lg pb-xl max-w-[1440px]">
+    <main id="mainContent" class="md:ml-[260px] pt-24 px-lg pb-xl max-w-[1440px]">
         <!-- Boas-vindas -->
         <section class="mb-xl">
             <div class="flex flex-wrap items-center gap-md mb-xs">
@@ -388,5 +401,11 @@
             </div>
         </section>
     </main>
+
+    <script>
+        function toggleSidebar() {
+            document.body.classList.toggle('sidebar-collapsed');
+        }
+    </script>
 </body>
 </html>

@@ -79,16 +79,9 @@
         <div class="flex items-center gap-md md:gap-xl">
             <a asp-controller="Home" asp-action="Index" class="flex items-center gap-sm shrink-0">
                 <div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center overflow-hidden">
-                    @if (!string.IsNullOrEmpty(logo))
-                    {
-                        <img src="@logo" alt="Logo" class="w-full h-full object-cover" />
-                    }
-                    else
-                    {
-                        <span class="material-symbols-outlined text-white text-[20px]">storefront</span>
-                    }
+                    <span class="material-symbols-outlined text-white text-[20px]">storefront</span>
                 </div>
-                <span class="font-headline-md text-headline-md font-bold text-primary">@nomeLoja</span>
+                <span class="font-headline-md text-headline-md font-bold text-primary">ERP XYM</span>
             </a>
             <div class="relative w-96 hidden lg:block">
                 <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
@@ -127,7 +120,6 @@
         <section class="mb-xl">
             <div class="flex flex-wrap items-center gap-md mb-xs">
                 <h2 class="font-headline-lg text-headline-lg text-primary">@saudacao, Administrador</h2>
-                <span class="bg-surface-container text-on-surface-variant px-sm py-xs rounded-full font-label-sm text-label-sm">Prévia · dados de exemplo</span>
             </div>
             <p class="font-body-lg text-body-lg text-on-surface-variant">Escolha um módulo para começar ou acompanhe o resumo da @nomeLoja.</p>
         </section>

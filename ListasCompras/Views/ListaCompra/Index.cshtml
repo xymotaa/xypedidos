@@ -1,9 +1,115 @@
 @model ListasCompras.Models.ReposicaoIndexViewModel
 @{
+    Layout = null;
     ViewData["Title"] = "Nova Lista de Compras";
-}
 
-<div class="page-container">
+    var nomeLoja = ViewData["NomeLoja"] as string ?? "Minha Loja";
+    var logo = ViewData["LogoLoja"] as string;
+    var inicial = string.IsNullOrWhiteSpace(nomeLoja) ? "L" : nomeLoja.Trim()[0].ToString().ToUpper();
+}
+<!DOCTYPE html>
+<html class="light" lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>@nomeLoja — @ViewData["Title"]</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-tertiary-container": "#93baa7", "outline-variant": "#bfc9c3",
+                        "on-tertiary-fixed-variant": "#294e3f", "surface": "#f8f9ff",
+                        "inverse-on-surface": "#eaf1ff", "outline": "#707974", "on-primary": "#ffffff",
+                        "secondary": "#006c49", "error-container": "#ffdad6", "primary-fixed-dim": "#95d3ba",
+                        "on-secondary": "#ffffff", "inverse-primary": "#95d3ba", "primary": "#003527",
+                        "on-error-container": "#93000a", "on-tertiary-fixed": "#002115", "primary-fixed": "#b0f0d6",
+                        "on-surface": "#0b1c30", "tertiary-fixed": "#c3ecd7", "on-primary-container": "#80bea6",
+                        "surface-container-highest": "#d3e4fe", "on-primary-fixed-variant": "#0b513d",
+                        "on-error": "#ffffff", "surface-container-lowest": "#ffffff", "surface-container": "#e5eeff",
+                        "secondary-fixed": "#6ffbbe", "surface-container-low": "#eff4ff", "surface-tint": "#2b6954",
+                        "background": "#f8f9ff", "on-primary-fixed": "#002117", "primary-container": "#064e3b",
+                        "on-background": "#0b1c30", "tertiary-container": "#274b3c", "error": "#ba1a1a",
+                        "surface-bright": "#f8f9ff", "inverse-surface": "#213145", "tertiary": "#0e3427",
+                        "surface-dim": "#cbdbf5", "on-secondary-fixed-variant": "#005236", "tertiary-fixed-dim": "#a8cfbc",
+                        "secondary-fixed-dim": "#4edea3", "surface-container-high": "#dce9ff",
+                        "on-secondary-container": "#00714d", "secondary-container": "#6cf8bb",
+                        "surface-variant": "#d3e4fe", "on-surface-variant": "#404944", "on-tertiary": "#ffffff",
+                        "on-secondary-fixed": "#002113"
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                    spacing: { "container-margin": "24px", "lg": "24px", "base": "4px", "gutter": "16px", "sm": "8px", "xs": "4px", "md": "16px", "xl": "32px" },
+                    fontFamily: {
+                        "body-md": ["Hanken Grotesk"], "headline-md": ["Hanken Grotesk"], "title-lg": ["Hanken Grotesk"],
+                        "body-lg": ["Hanken Grotesk"], "label-sm": ["Hanken Grotesk"], "headline-lg": ["Hanken Grotesk"],
+                        "display-lg": ["Hanken Grotesk"], "label-md": ["Hanken Grotesk"]
+                    },
+                    fontSize: {
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["22px", { "lineHeight": "30px", "fontWeight": "600" }],
+                        "title-lg": ["18px", { "lineHeight": "24px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "label-sm": ["11px", { "lineHeight": "14px", "fontWeight": "600" }],
+                        "headline-lg": ["28px", { "lineHeight": "36px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "display-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-md": ["12px", { "lineHeight": "16px", "letterSpacing": "0.02em", "fontWeight": "500" }]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body { font-family: 'Hanken Grotesk', sans-serif; background-color: #f8f9ff; color: #0b1c30; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    </style>
+</head>
+<body class="bg-surface">
+    <!-- Barra superior -->
+    <header class="fixed top-0 w-full z-50 bg-surface border-b border-outline-variant shadow-sm flex justify-between items-center h-16 px-lg">
+        <div class="flex items-center gap-md md:gap-xl">
+            <a asp-controller="Home" asp-action="Index" class="flex items-center gap-sm shrink-0">
+                <div class="w-9 h-9 rounded-lg bg-primary flex items-center justify-center overflow-hidden">
+                    <span class="material-symbols-outlined text-white text-[20px]">storefront</span>
+                </div>
+                <span class="font-headline-md text-headline-md font-bold text-primary">ERP XYM</span>
+            </a>
+            <div class="relative w-96 hidden lg:block">
+                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+                <input class="w-full bg-surface-container-low border-none rounded-full pl-10 pr-4 py-2 font-body-md text-body-md focus:ring-2 focus:ring-secondary/20"
+                       placeholder="Pesquisar…" type="text" disabled />
+            </div>
+        </div>
+        <div class="flex items-center gap-md">
+            <a class="w-10 h-10 flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors text-on-surface-variant"
+               asp-controller="Configuracao" asp-action="Index" title="Configurações">
+                <span class="material-symbols-outlined">settings</span>
+            </a>
+            <div class="h-8 w-[1px] bg-outline-variant mx-sm"></div>
+            <div class="flex items-center gap-sm">
+                <div class="text-right hidden sm:block">
+                    <p class="font-label-md text-label-md font-semibold text-on-surface">@nomeLoja</p>
+                    <p class="font-label-sm text-label-sm text-outline">Administrador</p>
+                </div>
+                <div class="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-bold overflow-hidden border-2 border-primary-fixed">
+                    @if (!string.IsNullOrEmpty(logo))
+                    {
+                        <img src="@logo" alt="Logo" class="w-full h-full object-cover" />
+                    }
+                    else
+                    {
+                        <span>@inicial</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </header>
+
+<div class="page-container" style="padding-top: 6rem;">
     <div class="page-header">
         <h1>Nova Lista de Compras</h1>
         <p>Gerencie a reposição de estoque da loja</p>
@@ -143,10 +249,10 @@
     Gerar PDF
 </a>
 
-@section Scripts {
     <script>
         const produtos = @Html.Raw(Json.Serialize(Model.Produtos.Select(p => new { p.Id, p.Nome, p.CategoriaId })));
         const modelos = @Html.Raw(Json.Serialize(Model.Modelos.Select(m => new { m.Id, m.Nome, m.MarcaCelularId })));
     </script>
     <script src="~/js/reposicao.js" asp-append-version="true"></script>
-}
+</body>
+</html>

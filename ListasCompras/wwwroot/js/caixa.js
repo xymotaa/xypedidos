@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 '<td class="px-md py-sm font-body-md text-body-md text-on-surface-variant">' + item.codigo + '</td>' +
                 '<td class="px-md py-sm font-body-md text-body-md text-on-surface font-semibold">' + item.nome + '</td>' +
                 '<td class="px-md py-sm text-center">' +
-                    '<div class="inline-flex items-center gap-xs bg-surface-container-low rounded-full px-xs py-xs">' +
+                    '<div class="inline-flex items-center gap-xs bg-surface-container-low rounded-md px-xs py-xs">' +
                         '<button type="button" data-index="' + index + '" class="qtd-btn qtd-dec w-6 h-6 rounded-full hover:bg-white flex items-center justify-center text-on-surface-variant font-bold leading-none transition-colors">−</button>' +
                         '<span class="qtd-valor w-5 text-center font-label-md text-label-md font-bold text-primary">' + item.qtd + '</span>' +
                         '<button type="button" data-index="' + index + '" class="qtd-btn qtd-inc w-6 h-6 rounded-full hover:bg-white flex items-center justify-center text-on-surface-variant font-bold leading-none transition-colors">+</button>' +

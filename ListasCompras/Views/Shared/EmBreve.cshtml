@@ -1,0 +1,31 @@
+@model ListasCompras.Models.ModuloEmBreveViewModel
+@{
+    ViewData["Title"] = Model.Nome;
+}
+
+<div class="page-container">
+    <div class="page-header">
+        <span class="trilha-topo">
+            <a asp-controller="Home" asp-action="Index">Painel</a> / @Model.Nome
+        </span>
+    </div>
+
+    <div class="breve-card">
+        <span class="breve-icone" aria-hidden="true">@Model.Icone</span>
+        <span class="breve-tag">Em desenvolvimento</span>
+        <h1 class="breve-titulo">@Model.Nome</h1>
+        <p class="breve-descricao">@Model.Descricao</p>
+
+        <div class="breve-lista">
+            <span class="breve-lista-rotulo">O que vem por aqui</span>
+            <ul>
+                @foreach (var recurso in Model.Recursos)
+                {
+                    <li>@recurso</li>
+                }
+            </ul>
+        </div>
+
+        <a class="btn-app btn-app-secondary" asp-controller="Home" asp-action="Index">Voltar ao painel</a>
+    </div>
+</div>

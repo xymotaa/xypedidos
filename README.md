@@ -1,4 +1,73 @@
-# ListasCompras — Guia de Alterações no Banco de Dados
+# xypedidos — Guia do Projeto
+
+Sistema em **ASP.NET Core MVC** (.NET 10) que começou como "Lista de Compras" e está
+sendo transformado em um **ERP** para a loja, módulo por módulo. Este guia tem duas
+partes: [Estrutura do ERP](#estrutura-do-erp-como-adicionar-módulos) (para criar/alterar
+telas) e o [Guia de Alterações no Banco de Dados](#guia-de-alterações-no-banco-de-dados)
+(mais abaixo).
+
+---
+
+## Estrutura do ERP (como adicionar módulos)
+
+A tela de início é um **Painel** (`HomeController.Index` → `Views/Home/Index.cshtml`) que
+funciona como um launcher: mostra um card para cada módulo do sistema.
+
+### Módulos
+
+| Módulo | Controller | Status | Rota |
+|---|---|---|---|
+| Lista de compras | `ListaCompraController` | ✅ Pronto | `/ListaCompra` |
+| Caixa | `CaixaController` | 🚧 Em breve | `/Caixa` |
+| Estoque | `EstoqueController` | 🚧 Em breve | `/Estoque` |
+| Orçamento | `OrcamentoController` | 🚧 Em breve | `/Orcamento` |
+| Dashboards | `DashboardsController` | 🚧 Em breve | `/Dashboards` |
+
+Cada módulo é construído **por partes**: primeiro as telas, e o **banco de dados de cada
+módulo fica para depois** — modelado com EF Core seguindo o mesmo esquema da Lista de
+Compras (veja a segunda parte deste guia).
+
+### Convenções
+
+- **Um controller por módulo**, herdando de `LojaControllerBase` (isso injeta o
+  `AppDbContext` e preenche `NomeLoja`/`LogoLoja` no `ViewData` para o layout).
+- **Módulo ainda não construído** retorna a tela genérica "Em breve":
+  ```csharp
+  return View("EmBreve", new ModuloEmBreveViewModel
+  {
+      Icone = "💵",
+      Nome = "Caixa",
+      Descricao = "Registre vendas e controle as entradas e saídas do dia.",
+      Recursos = new() { "Abertura e fechamento de caixa", /* ... */ },
+  });
+  ```
+  A view fica em `Views/Shared/EmBreve.cshtml` e é compartilhada por todos os módulos.
+- **Design system** em `wwwroot/css/site.css`: identidade ERP verde institucional
+  (`--pine: #123f31`), fonte Inter, cards com borda fina. Reaproveite as classes
+  existentes (`.page-container`, `.card-forms`, `.btn-app`, `.app-table`, `.pill`...) em
+  vez de criar estilo novo. Orientação visual: skill `frontend-design` em `.agents/skills/`.
+- **Layout e navbar** em `Views/Shared/_Layout.cshtml`. A logo/nome da loja levam de volta
+  ao Painel.
+
+### Passo a passo: transformar um "Em breve" em módulo real
+
+1. No card do Painel (`Views/Home/Index.cshtml`), marque o módulo como `Disponivel = true`.
+2. No controller do módulo, troque o `View("EmBreve", ...)` por uma `Index()` que monta o
+   view model real e retorna a view própria.
+3. Crie `Views/<Modulo>/Index.cshtml` (e demais telas), espelhando `Views/ListaCompra/`.
+4. Modele as tabelas/entidades no banco (segunda parte deste guia) e adicione a migration
+   EF Core correspondente.
+
+### Passo a passo: adicionar um módulo totalmente novo ao Painel
+
+1. Crie `<Nome>Controller : LojaControllerBase` com `Index()` retornando `View("EmBreve", ...)`.
+2. Adicione o card ao array `modulos` em `Views/Home/Index.cshtml` (ícone, nome, descrição,
+   `Controller`, `Disponivel = false`).
+3. Pronto — a rota `/{Controller}` já funciona pela rota padrão (`Program.cs`).
+
+---
+
+## Guia de Alterações no Banco de Dados
 
 Este projeto usa um banco **SQLite** (`loja.db`), gerado automaticamente na primeira
 execução com dados iniciais (`ListasCompras/Data/SeedData.cs`). Como ainda não existe

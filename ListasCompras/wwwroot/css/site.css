@@ -489,8 +489,220 @@ table.app-table tbody tr:hover {
   color: var(--ink-soft);
 }
 
+/* ===== Painel de módulos ===== */
+.modulos-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.modulo-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--pine);
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+  padding: 1.35rem 1.4rem;
+  text-decoration: none;
+  color: var(--ink);
+  transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+}
+
+.modulo-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--sombra-elevada);
+}
+
+.modulo-icone {
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  background: var(--pill-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.modulo-corpo {
+  flex: 1;
+}
+
+.modulo-nome {
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0 0 0.3rem;
+  color: var(--ink);
+}
+
+.modulo-descricao {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.modulo-rodape {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modulo-status {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 0.28rem 0.6rem;
+  border-radius: 5px;
+}
+
+.modulo-status-ativo {
+  background: var(--pill-bg);
+  color: var(--pill-ink);
+}
+
+.modulo-status-breve {
+  background: var(--paper);
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+}
+
+.modulo-seta {
+  color: var(--pine);
+  font-size: 1.15rem;
+  font-weight: 700;
+  transition: transform 0.15s;
+}
+
+.modulo-card:hover .modulo-seta {
+  transform: translateX(3px);
+}
+
+/* Módulos ainda não construídos ficam discretos */
+.modulo-card-breve {
+  border-left-color: var(--line);
+}
+
+.modulo-card-breve .modulo-icone {
+  background: var(--paper);
+  filter: grayscale(0.35);
+  opacity: 0.85;
+}
+
+.modulo-card-breve .modulo-nome {
+  color: var(--ink-soft);
+}
+
+/* ===== Tela "Em breve" ===== */
+.trilha-topo {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.trilha-topo a {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.breve-card {
+  max-width: 620px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: var(--sombra);
+  padding: 2.25rem;
+}
+
+.breve-icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  border-radius: 12px;
+  background: var(--pill-bg);
+  font-size: 1.8rem;
+  line-height: 1;
+  margin-bottom: 1rem;
+}
+
+.breve-tag {
+  display: inline-block;
+  margin-left: 0.75rem;
+  vertical-align: middle;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--pill-ink);
+  background: var(--pill-bg);
+  padding: 0.28rem 0.6rem;
+  border-radius: 5px;
+}
+
+.breve-titulo {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+}
+
+.breve-descricao {
+  margin: 0 0 1.75rem;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.breve-lista {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 1.25rem 1.4rem;
+  margin-bottom: 1.75rem;
+}
+
+.breve-lista-rotulo {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+  margin-bottom: 0.75rem;
+}
+
+.breve-lista ul {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.breve-lista li {
+  font-size: 0.9rem;
+  color: var(--ink);
+}
+
+.breve-lista li::marker {
+  color: var(--moss);
+}
+
 /* ===== Responsivo ===== */
 @media (max-width: 640px) {
+  .modulos-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .breve-card {
+    padding: 1.5rem;
+  }
+
   .app-navbar .store-name {
     font-size: 0.95rem;
   }

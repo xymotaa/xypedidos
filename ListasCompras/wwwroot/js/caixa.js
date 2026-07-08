@@ -15,6 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const finalizarBtn = document.getElementById("finalizarBtn");
     const toast = document.getElementById("toast");
     const toastMsg = document.getElementById("toastMsg");
+    const toastIcon = document.getElementById("toastIcon");
 
     function formatBRL(valor) {
         return "R$ " + valor.toLocaleString("pt-BR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
@@ -42,11 +43,15 @@ document.addEventListener("DOMContentLoaded", function () {
         }) || null;
     }
 
+    // Preço final da unidade após desconto. O tipo (percentual ou valor em
+    // reais) só muda a fórmula usada, o resultado final é sempre o preço
+    // unitário líquido, e desconto 0 nunca altera o preço cheio.
     function precoComDesconto(item) {
+        if (!item.desconto) return item.precoUnitario;
         if (item.descontoTipo === "valor") {
             return Math.max(item.precoUnitario - item.desconto, 0);
         }
-        return item.precoUnitario * (1 - item.desconto / 100);
+        return item.precoUnitario * (1 - Math.min(item.desconto, 100) / 100);
     }
 
     function subtotalItem(item) {
@@ -60,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
     function descontoCelulaHtml(item, index) {
         const max = item.descontoTipo === "valor" ? item.precoUnitario : 100;
         const step = item.descontoTipo === "valor" ? "0.01" : "1";
-        return '<div class="inline-flex items-center gap-xs bg-surface-container-low rounded-md overflow-hidden">' +
+        return '<div class="inline-flex items-center bg-surface-container-low rounded-md overflow-hidden">' +
             '<input type="number" min="0" max="' + max + '" step="' + step + '" value="' + item.desconto + '" data-index="' + index + '" ' +
             'class="desconto-input w-14 text-center bg-transparent border-none py-1 font-body-md text-body-md [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none" />' +
             '<button type="button" data-index="' + index + '" title="Alternar entre % e R$" ' +
@@ -148,9 +153,11 @@ document.addEventListener("DOMContentLoaded", function () {
         finalizarBtn.classList.toggle("cursor-not-allowed", !podeFinalizar);
     }
 
-    function mostrarToast(mensagem) {
+    function mostrarToast(mensagem, erro) {
         toastMsg.textContent = mensagem;
-        toast.classList.remove("hidden");
+        toast.classList.remove("hidden", "bg-secondary-container", "text-on-secondary-container", "bg-error-container", "text-error");
+        toast.classList.add.apply(toast.classList, erro ? ["bg-error-container", "text-error"] : ["bg-secondary-container", "text-on-secondary-container"]);
+        toastIcon.textContent = erro ? "error" : "check_circle";
         window.clearTimeout(mostrarToast._timer);
         mostrarToast._timer = window.setTimeout(function () {
             toast.classList.add("hidden");
@@ -218,7 +225,18 @@ document.addEventListener("DOMContentLoaded", function () {
         const max = item.descontoTipo === "valor" ? item.precoUnitario : 100;
         let valor = parseFloat(e.target.value);
         if (isNaN(valor) || valor < 0) valor = 0;
-        if (valor > max) valor = max;
+        if (valor > max) {
+            valor = max;
+            e.target.value = max;
+            e.target.classList.add("ring-2", "ring-error");
+            window.setTimeout(function () { e.target.classList.remove("ring-2", "ring-error"); }, 1200);
+            mostrarToast(
+                item.descontoTipo === "valor"
+                    ? "O desconto de \"" + item.nome + "\" não pode ultrapassar o valor do produto (" + formatBRL(item.precoUnitario) + ")."
+                    : "O desconto de \"" + item.nome + "\" não pode ultrapassar 100%.",
+                true
+            );
+        }
         item.desconto = valor;
         const linha = itensBody.querySelector('tr[data-index="' + index + '"] .subtotal-cell');
         if (linha) linha.textContent = formatBRL(subtotalItem(item));
